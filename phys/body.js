@@ -1,7 +1,5 @@
 Phys = window.Phys || { };
 
-if(!Math2d) throw new error('require Math2d');
-
 Phys.Body = function (p, s) {
 	var self = this;
 	
