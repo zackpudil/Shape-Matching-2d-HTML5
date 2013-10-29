@@ -1,26 +1,21 @@
 World = window.World || { };
 
-World.Scene = function (canvas, width, height) {
+if(typeof(Math2d) == 'undefined') throw new error('need Math2d');
+
+World.Scene = function (canvas) {
 	this.actors = [];
 	this.renderer = new World.Renderer(canvas.getContext('2d'));
-	this.bounds = new World.Bounds(0, 0, width, height);
 };
 
 World.Scene.TIMESTEP = 1/60;
+
+World.Scene.BOUND_MIN = new Math2d.Vector(10, 10);
+World.Scene.BOUND_MAX = new Math2d.Vector(490, 490);
+
 World.Scene.GRAVITY = new Math2d.Vector(0, 8);
 
-World.Scene.prototype.checkBounds = function () {
-	var self = this;
-	
-	this.actors.each(function(a) { 
-		a.prepare();
-		
-		var boundOffenders = a.body.particles.where(function(p) { return self.bounds.check(p.newPosition); });
-		boundOffenders.each(function(p) { 
-			p.updatePositionDueToBounds(self.bounds.getPassiveCoord(p.newPosition));
-			self.bounds.clamp(p.newPosition);
-		});
-	});
+World.Scene.prototype.addActor = function(b) {
+	this.actors.push(b);
 };
 
 World.Scene.prototype.updatePositions = function () {
@@ -34,7 +29,6 @@ World.Scene.prototype.renderScene = function () {
 };
 
 World.Scene.prototype.tick = function () {
-	this.checkBounds();
 	this.updatePositions();
 	this.renderScene();
 };

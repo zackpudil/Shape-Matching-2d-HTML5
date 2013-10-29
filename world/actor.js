@@ -27,11 +27,8 @@ World.Actor.prototype.render = function(renderer) {
 	});
 };
 
-World.Actor.prototype.prepare = function () {
-	this.body.externalForces();
-}
-
 World.Actor.prototype.act = function () {
+	this.body.externalForces();
 	this.body.projectPositions();
 	this.body.integrate();
 };
