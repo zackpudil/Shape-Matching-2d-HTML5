@@ -6,21 +6,33 @@ var Demo = (function(canvas) {
 		{ stroke: '#8372F2', fill: '#AFA4F5'}
 	);
 	
-	var scene = new World.Scene(canvas);
-	scene.addActor(actor);
+	var scene = new World.Scene(canvas, canvas.width, canvas.height);
+	scene.actors.push(actor);
 	
 	var interval = null;
 	
 	var mouse = new Math2d.Vector(0, 0);
 	var mouseDown = false;
+	var animated = false;
 	
 	this.animate = function() {
+		if(body.particles.length == 0) {
+			alert("Click the screen to add particles, ya dummy! :)");
+			return false;
+		}
+		
+		if(animated) return false;
+		
+		animated = true;
+		
 		interval = window.setInterval(function() {
 			if(mouseDown)
 				body.particles[0].position = mouse;
 				
 			scene.tick();
 		}, World.Scene.TIMESTEP*1000);
+		
+		return true;
 	};
 	
 	this.animateMouseDown = function (e) {
@@ -51,8 +63,11 @@ var Demo = (function(canvas) {
 	};
 	
 	this.reset = function (e) {
+		if(!animated) return;
 		body.particles = [];
 		clearInterval(interval);
+		scene.renderer.clear();
+		animated = false;
 	};
 	
 	return this;

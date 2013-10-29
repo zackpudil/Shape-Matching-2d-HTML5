@@ -23,6 +23,14 @@ Math2d.Vector.prototype.squaredMagnitude = function () {
 	return this.x*this.x + this.y*this.y;
 };
 
+Math2d.Vector.prototype.min = function (v) {
+	return new Math2d.Vector(Math.min(v.x, this.x), Math.min(v.y, this.y));
+};
+
+Math2d.Vector.prototype.max = function (v) {
+	return new Math2d.Vector(Math.max(v.x, this.x), Math.max(v.y, this.y));
+}
+
 Math2d.Vector.prototype.magnitude = function () {
 	return Math.sqrt(this.squaredMagnitude());
 };
@@ -32,8 +40,6 @@ Math2d.Vector.prototype.multiplyMatrix = function (m) {
 }
 
 Math2d.Vector.prototype.cartesianProduct = function (v) {
-	if(!Math2d.Matrix) return null;
-	
 	return new Math2d.Matrix(this.x*v.x, this.x*v.y, this.y*v.x, this.y*v.y);
 };
 
