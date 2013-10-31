@@ -25,6 +25,8 @@ World.Actor.prototype.render = function(renderer) {
 		renderer.circle(p.position, 5); 
 		renderer.draw();
 	});
+	
+	renderer.reset();
 };
 
 World.Actor.prototype.prepare = function () {

@@ -22,12 +22,16 @@
 		</canvas>
 		<br />
 		<p>
-			<label for="stiffness">Stiffness</label><input id="stiffness" type="range" min="0.1" max="1" step="0.1" value="1" /><br />
+			<div id="stiff">
+				<label for="stiffness_0">Stiffness 0</label>
+				<input id="stiffness_0" class="stiffness" data-index="0" type="range" min="0.1" max="1" step="0.1" value="1" />
+			</div>
 			<label for="gravity">Gravity</label><input id="gravity" type="range" min="0" max="15" step="0.5" value="8" />
 		</p>
 		<p>
 			<button id="start">Animate</button>
-			<button id="reset">Reset</button>
+			<button id="addAnother">Draw another</button>
+			<button id="reset">Clear</button>
 		</p>
 
 	</body>
@@ -36,22 +40,23 @@
 		var canvas = document.getElementById('canvas');
 		var context = canvas.getContext('2d');
 		
-		var instructions = function() {
+		function instructions() {
 			context.font = '15pt Calibri';
 			context.fillStyle = '#8372F2';
 			context.fillText("Create shapes by clicking to add vertices.", 10, canvas.height/2-42);
 			context.fillText("Once you are done creating shape, click animate.", 10, canvas.height/2-20);
 			context.fillText("Once you are done playing, click reset to start over.", 10, canvas.height/2+2);
-		};
+		}
 		
 		var demo = new Demo(canvas);
 		
-		$('#stiffness').change(demo.stiffnessSliderChange);
+		$('#stiff').on('change', demo.stiffnessSliderChange);
 		$('#gravity').change(demo.gravitySliderChange);
 				
 		$('#canvas').mousedown(demo.drawingMouseDown);
-		instructions();
 	
+		instructions();
+		
 		$('#start').click(function(e) {
 			if(!demo.animate())
 				return;
@@ -62,12 +67,24 @@
 			$('#canvas').mousemove(demo.mouseMove)
 		});
 		
-		$('#reset').click(function(e) {
-			demo.reset();
-			instructions();
+		$('#addAnother').click(function(e) {
+			if(!demo.pause()) return;
+			var index = $('.stiffness').length;
+			$('#stiff').append($('<br />'+
+				'<label id="stiffness_'+index+'">Stiffness '+index+'</label>' +
+				'<input id="stiffnes_'+index+'" class="stiffness" data-index="'+index+'" type="range" min="0.1" max="1" step="0.1" value="1" />'
+			));
 			$('#canvas').unbind('mousedown');
 			$('#canvas').mousedown(demo.drawingMouseDown);
-		})
+		});
+		
+		$('#reset').click(function(e) {
+			$('#stiff').find('input[id!="stiffness_0"], label[for!="stiffness_0"], br').remove();
+			demo.clearCanvas();
+			$('#canvas').unbind('mousedown');
+			$('#canvas').mousedown(demo.drawingMouseDown);
+			instructions();
+		});
 		
 	</script>
 </html>

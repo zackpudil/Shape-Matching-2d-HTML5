@@ -33,6 +33,13 @@ World.Scene.prototype.renderScene = function () {
 	this.actors.each(function (a) { a.render(self.renderer); });
 };
 
+World.Scene.prototype.getParticlesInRange = function(v, r) {
+	var particles = this.actors.selectMany(function(a) { return a.body.particles; });
+	return particles.where(function(p) {
+		return p.position.subtract(v).magnitude() <= r;
+	});
+};
+
 World.Scene.prototype.tick = function () {
 	this.checkBounds();
 	this.updatePositions();
