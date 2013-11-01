@@ -54,3 +54,25 @@ Phys.Body.prototype.rotation = function (c, ic) {
 		.polarDecomposition()
 		.rotation;
 };
+
+Phys.Body.prototype.minMaxProjections = function (axis) {
+	var sortedByProjects = this.particles.sortBy(function(p) { return p.newPosition.dot(axis); }),
+		minPart = sortedByProjects[0];
+		maxPart = sortedByProjects[sortedByProjects.length-1];
+
+	return {
+		min: { part: minPart, proj: minPart.newPosition.dot(axis) },
+		max: { part: maxPart, proj: maxPart.newPosition.dot(axis) },
+	};
+};
+
+Phys.Body.prototype.collisionAxises = function () {
+	var self = this;
+	return Array
+		.enumerate(this.particles.length)
+		.select(function(i) {
+			var p1 = self.particles[i].newPosition,
+				p2 = self.particles[i + 1 == self.particles.length ? 0 : i + 1].newPosition;
+			return p1.subtract(p2).norm().unit();
+		});
+};

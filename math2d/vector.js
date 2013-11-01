@@ -19,8 +19,8 @@ Math2d.Vector.prototype.scale = function (s) {
 	return new Math2d.Vector(this.x*s, this.y*s);
 };
 
-Math2d.Vector.prototype.squaredMagnitude = function () {
-	return this.x*this.x + this.y*this.y;
+Math2d.Vector.prototype.dot = function (v) {
+	return this.x*v.x + this.y*v.y;
 };
 
 Math2d.Vector.prototype.min = function (v) {
@@ -29,10 +29,19 @@ Math2d.Vector.prototype.min = function (v) {
 
 Math2d.Vector.prototype.max = function (v) {
 	return new Math2d.Vector(Math.max(v.x, this.x), Math.max(v.y, this.y));
-}
+};
+
+Math2d.Vector.prototype.unit = function () {
+	var mag = this.magnitude();
+	return new Math2d.Vector(this.x/mag, this.y/mag);
+};
+
+Math2d.Vector.prototype.norm = function () {
+	return new Math2d.Vector(-this.y, this.x);
+};
 
 Math2d.Vector.prototype.magnitude = function () {
-	return Math.sqrt(this.squaredMagnitude());
+	return Math.sqrt(this.dot(this));
 };
 
 Math2d.Vector.prototype.multiplyMatrix = function (m) {
