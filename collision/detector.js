@@ -22,22 +22,33 @@ Collision.Detector.prototype.narrowPhaseDetection = function (b1, b2) {
 };
 
 Collision.Detector.prototype.minMaxProjections = function (body, axis) {
-	var sortedByProjects = body.particles.sortBy(function(p) { return axis.scale(p.newPosition.dot(axis)).magnitude(); }),
-		minPart = sortedByProjects[0],
-		maxPart = sortedByProjects[sortedByProjects.length-1];
+	var sorted = body.particles
+		.select(function(p) { return { part: p, proj: Math.abs(p.newPosition.dot(axis)) } });
+
+	var min = sorted[0];
+	var max = min;
+
+	sorted.each(function(s) {
+		if(s.proj < min.proj)
+			min = s;
+
+		if(s.proj > max.proj)
+			max = s;
+	});
 
 	return {
-		min: { part: minPart, proj: axis.scale(minPart.newPosition.dot(axis)).magnitude() },
-		max: { part: maxPart, proj: axis.scale(maxPart.newPosition.dot(axis)).magnitude() }
+		min: min,
+		max: max
 	};
 };
 
 Collision.Detector.prototype.collisionAxises = function (body) {
 	return Array
-		.range(1, body.particles.length+1)
+		.range(1, body.particles.length + 1)
 		.select(function(i) {
 			var p1 = body.particles[i == body.particles.length ? 0 : i].newPosition,
 				p2 = body.particles[i - 1].newPosition;
+
 			return p1.subtract(p2).norm().unit();
 		});
 };
