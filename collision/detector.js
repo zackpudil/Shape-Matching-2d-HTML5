@@ -8,9 +8,6 @@ Collision.Detector.prototype.narrowPhaseDetection = function (b1, b2) {
 	var axises = this.collisionAxises(b1);
 	axises.pushRange(this.collisionAxises(b2));
 
-	var renderer = new World.Renderer(document.getElementById('canvas').getContext('2d'));
-	var center = new Math2d.Vector(250, 250);
-
 	var isSeperated = false;
 	axises.each(function(axis) {
 		var b1MinMax = self.minMaxProjections(b1, axis),
