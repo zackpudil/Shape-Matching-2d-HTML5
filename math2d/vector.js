@@ -37,7 +37,7 @@ Math2d.Vector.prototype.unit = function () {
 };
 
 Math2d.Vector.prototype.norm = function () {
-	return new Math2d.Vector(-this.y, this.x);
+	return new Math2d.Vector(this.y, -this.x);
 };
 
 Math2d.Vector.prototype.magnitude = function () {

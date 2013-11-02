@@ -21,8 +21,9 @@ World.Renderer.prototype.reset = function () {
 };
 
 World.Renderer.prototype.updatePallet = function (p) {
-	this.context.strokeStyle = p.stroke;
-	this.context.fillStyle = p.fill;
+	this.context.strokeStyle = p.stroke || 'black';
+	this.context.fillStyle = p.fill || 'black';
+	this.context.lineWidth = p.lineWidth || 1;
 }
 
 World.Renderer.prototype.draw = function () { 
