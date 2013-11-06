@@ -4,10 +4,13 @@ Math2d = window.Math2d || { };
 //  *   a   *   b    *
 //  *       *        *
 //  ******************
-//  *   c 	*		d	   *
-//	*				*				 *
+//  *   c 	*   d	 *
+//	*		*		 *
 //	******************
 
+/*-------------------------------------------------------
+This is a matrix, which in a sense, sorts the rotational data of a "vector".
+-------------------------------------------------------*/
 Math2d.Matrix = function (a, b, c, d) {
 	this.a = a;
 	this.b = b;
@@ -72,6 +75,7 @@ Math2d.Matrix.prototype.equals = function (m) {
 }
 
 Math2d.Matrix.prototype.eigenDecomposition = function () {
+	//this method of eigen decomposition is a Jacobi rotation.
 	var eigenValueMatrix = new Math2d.Matrix(this.a, this.b, this.c, this.d);
 	var eigenVectorMatrix = new Math2d.Matrix(1, 0, 0, 1);
 	
@@ -99,6 +103,8 @@ Math2d.Matrix.prototype.eigenDecomposition = function () {
 };
 
 Math2d.Matrix.prototype.polarDecomposition = function () {
+	//polar decomposition is decompositig a matrix "A" into two other matrices, "RS"
+	//	where s contains the translative data and R contains the rotational data, in a sense.
 	var rotationMatrix = new Math2d.Matrix(1, 0, 0, 1);
 	var scalarMatrix = new Math2d.Matrix(0, 0, 0, 0);
 	
@@ -123,11 +129,14 @@ Math2d.Matrix.prototype.polarDecomposition = function () {
 };
 
 (function () {
+	//loop through all the methods in this "class", and create self modifying methods.
 	for(var method in Math2d.Matrix.prototype) {
 		if(!/new Math2d\.Matrix/g.test(Math2d.Matrix.prototype[method]) && method != "eigenDecomposition") continue;
-		
+		//a anonymous self invoking function to perserve the method name inside of the '_' method.
 		(function (name) {
 			Math2d.Matrix.prototype[name+'_'] = function(args) {
+				//this line right here is the reason for the self invoking function. it was "method" than every "_" method would be calling the
+				// last method in the for each iteration.
 				var m = this[name](args);
 				
 				this.a = m.a; this.b = m.b;

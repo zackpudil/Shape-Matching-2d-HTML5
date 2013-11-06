@@ -1,5 +1,8 @@
 World = window.World || { };
 
+/*------------------------------------------
+Simply a container to the HTML 5 canvas drawing lib.
+------------------------------------------*/
 World.Renderer = function (c) {
 	this.context = c;
 };

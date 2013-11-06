@@ -2,6 +2,10 @@ Math2d = window.Math2d || {};
 
 // <x, y>
 
+/*-------------------------------------------------------
+A Vector, which is a component that consists of an x and y coordinate,
+	that repesents a spot on the 2d canvas
+-------------------------------------------------------*/
 Math2d.Vector = function(x, y) {
 	this.x = x;
 	this.y = y;
@@ -32,11 +36,13 @@ Math2d.Vector.prototype.max = function (v) {
 };
 
 Math2d.Vector.prototype.unit = function () {
+	//unit vector is a vector's components divided by the magnitude.
 	var mag = this.magnitude();
 	return new Math2d.Vector(this.x/mag, this.y/mag);
 };
 
 Math2d.Vector.prototype.norm = function () {
+	//left handed norm.
 	return new Math2d.Vector(this.y, -this.x);
 };
 
@@ -60,7 +66,8 @@ Math2d.Vector.prototype.maximumDirection = function () {
 };
 
 (function() {
-	
+	//this block of code will run through the methods in the prototype where the code contains "new Math2d.Vector". and
+	// create a new one with an attached underscore, which will modifiy the current vector instead of returning a new one.
 	for(var method in Math2d.Vector.prototype) {
 		if(!/new Math2d\.Vector/g.test(Math2d.Vector.prototype[method])) continue;
 		

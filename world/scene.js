@@ -1,5 +1,8 @@
 World = window.World || { };
 
+/*------------------------------------------
+The current scene.  contains all the actors, and handles the update process.
+------------------------------------------*/
 World.Scene = function (canvas, width, height) {
 	this.actors = [];
 	this.renderer = new World.Renderer(canvas.getContext('2d'));
@@ -35,6 +38,7 @@ World.Scene.prototype.renderScene = function () {
 };
 
 World.Scene.prototype.getParticlesInRange = function(v, r) {
+	//a quick and dirty way of finding the particles within a certain radius at a certain position.
 	var particles = this.actors.selectMany(function(a) { return a.body.particles; });
 	return particles.where(function(p) {
 		return p.position.subtract(v).magnitude() <= r;
@@ -43,6 +47,8 @@ World.Scene.prototype.getParticlesInRange = function(v, r) {
 
 World.Scene.prototype.tick = function () {
 	this.checkBounds();
+
+	//TODO: change this implementation when broad phase collision detection is created.
 	if(this.actors.length == 2)
 		this.detector.narrowPhaseDetection(this.actors[0].body, this.actors[1].body);
 

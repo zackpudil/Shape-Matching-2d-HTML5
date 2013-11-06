@@ -1,5 +1,9 @@
 World = window.World || { };
 
+/*------------------------------------------
+Since bounds collision is the most common collision and the most trivial response,
+	we want to handle this as effitiently as possible.
+------------------------------------------*/
 World.Bounds = function (minx, miny, maxx, maxy) {
 	this.min = new Math2d.Vector(minx, miny);
 	this.max = new Math2d.Vector(maxx, maxy);

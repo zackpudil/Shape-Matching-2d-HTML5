@@ -1,10 +1,18 @@
 Collision = window.Collision || { };
 
+/*------------------------------------------
+This handles detecting collisions in the scene.
+There will be 2 types:
+	broad phase: generates AABB for all bodies and does simple detection.  Isn't full proof, just tells us that two bodies are "close".
+	narrow  phase: uses the Seperating Axis theorem to determine if two objects are actually colliding.
+------------------------------------------*/
 Collision.Detector = function () { };
 
 Collision.Detector.prototype.narrowPhaseDetection = function (a, b) {
+	//this uses the seperating axis theorem.
 	var self = this;
 
+	//get all the axis from both bodies.
 	var axises = this.collisionAxises(a);
 	axises.pushRange(this.collisionAxises(b));
 
@@ -12,6 +20,7 @@ Collision.Detector.prototype.narrowPhaseDetection = function (a, b) {
 	var mtv = { axis: axises[0], overlap: Number.MAX_VALUE };
 
 	axises.each(function(axis) {
+		//get the min-max projections of each body
 		var aProjection = self.minMaxProjections(a, axis),
 			bProjection = self.minMaxProjections(b, axis);
 			
@@ -60,6 +69,8 @@ Collision.Detector.prototype.projectionOverlap = function(a, b, axis) {
 }
 
 Collision.Detector.prototype.minMaxProjections = function (body, axis) {
+	// this function gets the min-max projections of the body and the axis.
+	// 	essentially the least/greatest particle's position along the axis.
 	var sorted = body.particles
 		.select(function(p) { return { part: p, proj: Math.abs(p.newPosition.dot(axis)) } });
 
@@ -81,6 +92,7 @@ Collision.Detector.prototype.minMaxProjections = function (body, axis) {
 };
 
 Collision.Detector.prototype.collisionAxises = function (body) {
+	//get the normals of the surfaces of the of the polygons.
 	return Array
 		.range(1, body.particles.length + 1)
 		.select(function(i) {
