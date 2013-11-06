@@ -4,6 +4,7 @@ World.Scene = function (canvas, width, height) {
 	this.actors = [];
 	this.renderer = new World.Renderer(canvas.getContext('2d'));
 	this.bounds = new World.Bounds(0, 0, width, height);
+	this.detector = new Collision.Detector();
 };
 
 World.Scene.TIMESTEP = 1/60;
@@ -42,6 +43,9 @@ World.Scene.prototype.getParticlesInRange = function(v, r) {
 
 World.Scene.prototype.tick = function () {
 	this.checkBounds();
+	if(this.actors.length == 2)
+		this.detector.narrowPhaseDetection(this.actors[0].body, this.actors[1].body);
+
 	this.updatePositions();
 	this.renderScene();
 };

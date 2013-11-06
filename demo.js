@@ -9,7 +9,7 @@ var Demo = (function(canvas) {
 	var scene = new World.Scene(canvas, canvas.width, canvas.height);
 	scene.actors.push(createActor());
 
-	var detector = new Collision.Detector();
+	window.debug = new Debugger(scene);
 	
 	var interval = null;
 	
@@ -32,9 +32,6 @@ var Demo = (function(canvas) {
 		interval = window.setInterval(function() {
 			if(mouseDown)
 				mouseParticle.position = mouse;
-
-			if(scene.actors.length == 2)
-				if(detector.narrowPhaseDetection(scene.actors[0].body, scene.actors[1].body)) console.log('Collision');
 
 			scene.tick();
 

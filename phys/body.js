@@ -13,7 +13,7 @@ Phys.Body.prototype.externalForces = function() {
 
 Phys.Body.prototype.integrate = function () {
 	this.particles.each(function(p) { p.integrate(); });
-}
+};
 
 Phys.Body.prototype.projectPositions = function () {
 	var self = this;
@@ -41,6 +41,12 @@ Phys.Body.prototype.centerOfMass = function (tm, pos) {
 		.sumV(function(p) { return p[pos].scale(p.fixed ? p.mass*100 : p.mass)})
 		.scale(1/tm);
 };
+
+Phys.Body.prototype.center = function (pos) {
+	return this.particles
+		.sumV(function(p) { return p[pos]; })
+		.scale(1/this.particles.length);
+}
 
 Phys.Body.prototype.relativeCoords = function (com, pos) {
 	return this.particles.select(function(p) { return p[pos].subtract(com); });

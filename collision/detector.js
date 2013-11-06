@@ -2,24 +2,62 @@ Collision = window.Collision || { };
 
 Collision.Detector = function () { };
 
-Collision.Detector.prototype.narrowPhaseDetection = function (b1, b2) {
+Collision.Detector.prototype.narrowPhaseDetection = function (a, b) {
 	var self = this;
 
-	var axises = this.collisionAxises(b1);
-	axises.pushRange(this.collisionAxises(b2));
+	var axises = this.collisionAxises(a);
+	axises.pushRange(this.collisionAxises(b));
 
 	var isSeperated = false;
-	axises.each(function(axis) {
-		var b1MinMax = self.minMaxProjections(b1, axis),
-			b2MinMax = self.minMaxProjections(b2, axis);
-			
-		isSeperated = b2MinMax.max.proj < b1MinMax.min.proj || b1MinMax.max.proj < b2MinMax.min.proj;
+	var mtv = { axis: axises[0], overlap: Number.MAX_VALUE };
 
+	axises.each(function(axis) {
+		var aProjection = self.minMaxProjections(a, axis),
+			bProjection = self.minMaxProjections(b, axis);
+			
+		isSeperated = bProjection.max.proj < aProjection.min.proj || aProjection.max.proj < bProjection.min.proj;
 		if(isSeperated) return false;
+
+		var overlap = self.projectionOverlap(aProjection, bProjection, axis);
+
+		if(overlap.overlap < mtv.overlap)
+			mtv = overlap;
 	});
 
-	return !isSeperated;	
+	// TODO: Have remove this into a seperate response class that will be more configurable by the body.
+	if(!isSeperated) {
+
+		var translation = mtv.axis.scale(mtv.overlap);
+
+		if(translation.maximumDirection() < 0)
+			translation.scale_(-1);
+
+		mtv.minPart.newPosition.add_(translation);
+		mtv.maxPart.newPosition.subtract_(translation);
+	}	
 };
+
+Collision.Detector.prototype.projectionOverlap = function(a, b, axis) {
+	var min = a.min.proj > b.min.proj ? a.min.proj : b.min.proj;
+	var max = a.max.proj < b.max.proj ? a.max.proj : b.max.proj;
+
+	var minPart, maxPart;
+
+	if(a.min.proj > b.min.proj) {
+		minPart = a.min.part;
+		maxPart = b.max.part;
+	} else {
+		minPart = b.min.part;
+		maxPart = a.max.part;
+	}
+
+	return { 
+		overlap: max - min,
+		minPart: minPart,
+		maxPart: maxPart,
+		axis: axis
+	};
+}
 
 Collision.Detector.prototype.minMaxProjections = function (body, axis) {
 	var sorted = body.particles

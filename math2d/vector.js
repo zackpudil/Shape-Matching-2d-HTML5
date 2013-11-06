@@ -46,10 +46,17 @@ Math2d.Vector.prototype.magnitude = function () {
 
 Math2d.Vector.prototype.multiplyMatrix = function (m) {
 	return new Math2d.Vector(this.x*m.a+this.y*m.c, this.x*m.b+this.y*m.d);
-}
+};
 
 Math2d.Vector.prototype.cartesianProduct = function (v) {
 	return new Math2d.Matrix(this.x*v.x, this.x*v.y, this.y*v.x, this.y*v.y);
+};
+
+Math2d.Vector.prototype.maximumDirection = function () {
+	if(Math.abs(this.x) > Math.abs(this.y))
+		return this.x;
+
+	return this.y;
 };
 
 (function() {
