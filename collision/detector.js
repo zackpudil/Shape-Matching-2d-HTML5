@@ -8,6 +8,14 @@ There will be 2 types:
 ------------------------------------------*/
 Collision.Detector = function () { };
 
+Collision.Detector.prototype.broadPhaseDetection = function (bodies) {	
+	var self = this;
+	var collidingGroups = bodies.permutateWhere(function(a, b) {
+		return self.aabb(a).check(self.aabb(b));
+	});
+	return collidingGroups;
+};
+
 Collision.Detector.prototype.narrowPhaseDetection = function (a, b) {
 	//this uses the seperating axis theorem.
 	var self = this;
@@ -70,7 +78,7 @@ Collision.Detector.prototype.projectionOverlap = function(a, b, axis) {
 
 Collision.Detector.prototype.minMaxProjections = function (body, axis) {
 	// this function gets the min-max projections of the body and the axis.
-	// 	essentially the least/greatest particle's position along the axis.
+	// essentially the least/greatest particle's position along the axis.
 	var sorted = body.particles
 		.select(function(p) { return { part: p, proj: Math.abs(p.newPosition.dot(axis)) } });
 
@@ -102,3 +110,20 @@ Collision.Detector.prototype.collisionAxises = function (body) {
 			return p1.subtract(p2).norm().unit();
 		});
 };
+
+Collision.Detector.prototype.aabb = function (body) {
+	var center = body.center('newPosition'),
+		relativeCoords = body.relativeCoords(center, 'newPosition'),
+		maxRelativeCoordX = relativeCoords[0].x,
+		maxRelativeCoordY = relativeCoords[0].y;
+
+	relativeCoords.each(function(r) {
+		if(Math.abs(maxRelativeCoordX) < Math.abs(r.x))
+			maxRelativeCoordX = r.x;
+
+		if(Math.abs(maxRelativeCoordY) < Math.abs(r.y))
+			maxRelativeCoordY = r.y;
+	});
+
+	return new Collision.AABB(Math.abs(maxRelativeCoordY), Math.abs(maxRelativeCoordX), center);
+}

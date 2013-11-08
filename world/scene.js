@@ -16,14 +16,23 @@ World.Scene.GRAVITY = new Math2d.Vector(0, 8);
 World.Scene.prototype.checkBounds = function () {
 	var self = this;
 	
-	this.actors.each(function(a) { 
-		a.prepare();
-		
+	this.actors.each(function(a) { 		
 		var boundOffenders = a.body.particles.where(function(p) { return self.bounds.check(p.newPosition); });
 		boundOffenders.each(function(p) { 
 			p.updatePositionDueToBounds(self.bounds.getPassiveCoord(p.newPosition));
 			self.bounds.clamp(p.newPosition);
 		});
+	});
+};
+
+World.Scene.prototype.checkCollisions = function () {
+	var self = this;
+	if(this.actors.length <= 1)
+		return;
+
+	var collidingGroups = this.detector.broadPhaseDetection(this.actors.select(function(a) { return a.body; }));
+	collidingGroups.each(function(cg) {
+		cg.permutate(function(a, b) { self.detector.narrowPhaseDetection(a, b); });
 	});
 };
 
@@ -46,12 +55,9 @@ World.Scene.prototype.getParticlesInRange = function(v, r) {
 };
 
 World.Scene.prototype.tick = function () {
+	this.actors.each(function(a) { a.prepare(); });
 	this.checkBounds();
-
-	//TODO: change this implementation when broad phase collision detection is created.
-	if(this.actors.length == 2)
-		this.detector.narrowPhaseDetection(this.actors[0].body, this.actors[1].body);
-
+	this.checkCollisions();
 	this.updatePositions();
 	this.renderScene();
 };
