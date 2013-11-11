@@ -35,10 +35,9 @@ World.Actor.prototype.render = function(renderer) {
 
 World.Actor.prototype.prepare = function () {
 	this.body.externalForces();
-	//prepare adds external forces, then shape matching.
-	this.body.projectPositions();
-}
+};
 
 World.Actor.prototype.act = function () {
+	this.body.projectPositions();
 	this.body.integrate();
 };
