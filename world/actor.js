@@ -1,43 +1,45 @@
-World = window.World || { };
+define([], function() {
 
+	/*------------------------------------------
+	The actor, as of now contains the body and color/stroke/alpha, and knows how to render itself.
+	------------------------------------------*/
+	var Actor = function (b, bc, pc) {
+		this.body = b;
+		this.bodyPallet = bc;
+		this.particlePallet = pc;
+	};
 
-/*------------------------------------------
-The actor, as of now contains the body and color/stroke/alpha, and knows how to render itself.
-------------------------------------------*/
-World.Actor = function (b, bc, pc) {
-	this.body = b;
-	this.bodyPallet = bc;
-	this.particlePallet = pc;
-};
-
-World.Actor.prototype.render = function(renderer) {
-	renderer.updatePallet(this.bodyPallet);
-	
-	renderer.moveTo(this.body.particles[0].position);
-	
-	this.body.particles.slice(1).each(function(p) {
-		renderer.lineTo(p.position);
-	});
-	
-	renderer.lineTo(this.body.particles[0].position);
-	renderer.draw();
-	
-	renderer.updatePallet(this.particlePallet);
-	
-	this.body.particles.each(function(p) { 
-		renderer.reset();
-		renderer.circle(p.position, 5); 
+	Actor.prototype.render = function(renderer) {
+		renderer.updatePallet(this.bodyPallet);
+		
+		renderer.moveTo(this.body.particles[0].position);
+		
+		this.body.particles.slice(1).each(function(p) {
+			renderer.lineTo(p.position);
+		});
+		
+		renderer.lineTo(this.body.particles[0].position);
 		renderer.draw();
-	});
-	
-	renderer.reset();
-};
+		
+		renderer.updatePallet(this.particlePallet);
+		
+		this.body.particles.each(function(p) { 
+			renderer.reset();
+			renderer.circle(p.position, 5); 
+			renderer.draw();
+		});
+		
+		renderer.reset();
+	};
 
-World.Actor.prototype.prepare = function () {
-	this.body.externalForces();
-};
+	Actor.prototype.prepare = function () {
+		this.body.externalForces();
+	};
 
-World.Actor.prototype.act = function () {
-	this.body.projectPositions();
-	this.body.integrate();
-};
+	Actor.prototype.act = function () {
+		this.body.projectPositions();
+		this.body.integrate();
+	};
+
+	return Actor;
+});
