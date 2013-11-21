@@ -38,4 +38,6 @@ define(['Math2d'], function(Math2d) {
 
 		this.renderer.draw();
 	};
+
+	return Debugger;
 });
