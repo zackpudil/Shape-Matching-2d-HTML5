@@ -1,12 +1,13 @@
-define([], function () {
-
-	var AABB = function (l, w, p) {
+export default class AABB {
+	constructor(l, w, p) {
 		this.length = l;
 		this.width = w;
 		this.position = p;
-	};
+	}
 
-	AABB.create = function (body) {
+	static create(body) {
+		var center = body.center('newPosition');
+		
 		var center = body.center('newPosition'),
 			relativeCoords = body.relativeCoords(center, 'newPosition'),
 			maxRelativeCoordX = relativeCoords[0].x,
@@ -21,14 +22,12 @@ define([], function () {
 		});
 
 		return new AABB(Math.abs(maxRelativeCoordY), Math.abs(maxRelativeCoordX), center);
-	};
+	}
 
-	AABB.prototype.check = function (aabb) {
+	check(aabb) {
 		var distance = this.position.subtract(aabb.position);
 
 		return this.width + aabb.width > Math.abs(distance.x)
 			&& this.length + aabb.length > Math.abs(distance.y);
-	};
-
-	return AABB;
-});
+	}
+}

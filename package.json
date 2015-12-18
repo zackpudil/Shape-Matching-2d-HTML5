@@ -1,0 +1,26 @@
+{
+  "name": "shape-matching-2d",
+  "version": "1.0.0",
+  "description": "Demonstrates algorithm for shape matching",
+  "main": "main.js",
+  "scripts": {
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zackpudil/Shape-Matching-2d-HTML5.git"
+  },
+  "author": "zack.pudil@gmail.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zackpudil/Shape-Matching-2d-HTML5/issues"
+  },
+  "homepage": "https://github.com/zackpudil/Shape-Matching-2d-HTML5#readme",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.3.13",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^6.1.1",
+    "gulp-browserify": "^0.5.1",
+    "gulp-concat": "^2.6.0"
+  }
+}
