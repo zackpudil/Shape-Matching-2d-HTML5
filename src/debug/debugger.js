@@ -25,8 +25,8 @@ export default class Debugger {
 	}
 
 	drawAABB(aabb, c) {
-		var w = new Vector(aabb.width, 0);
-		var l = new Vector(0, aabb.length);
+		let w = new Vector(aabb.width, 0);
+		let l = new Vector(0, aabb.length);
 
 		this.renderer.reset();
 		this.renderer.updatePallet({ stroke: c, fill: 'none' });

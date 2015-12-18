@@ -6,9 +6,7 @@ export default class AABB {
 	}
 
 	static create(body) {
-		var center = body.center('newPosition');
-		
-		var center = body.center('newPosition'),
+		let center = body.center('newPosition'),
 			relativeCoords = body.relativeCoords(center, 'newPosition'),
 			maxRelativeCoordX = relativeCoords[0].x,
 			maxRelativeCoordY = relativeCoords[0].y;
@@ -25,7 +23,7 @@ export default class AABB {
 	}
 
 	check(aabb) {
-		var distance = this.position.subtract(aabb.position);
+		let distance = this.position.subtract(aabb.position);
 
 		return this.width + aabb.width > Math.abs(distance.x)
 			&& this.length + aabb.length > Math.abs(distance.y);

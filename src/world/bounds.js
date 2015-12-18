@@ -1,12 +1,12 @@
 import Vector from '../math2d/vector';
 
 export default class Bounds {
+	static get RESTITUTION() { return 0.3 }
+
 	constructor(minx, miny, maxx, maxy) {
 		this.min = new Vector(minx, miny);
 		this.max = new Vector(maxx, maxy);
 	}
-
-	static get RESTITUTION() { return 0.3 }
 
 	checkMin(v) {
 		return v.x <= this.min.x || v.y <= this.min.y;

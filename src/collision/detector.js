@@ -86,7 +86,7 @@ export default class Detector {
 		return Array
 			.range(1, body.particles.length + 1)
 			.select(i => {
-				var p1 = body.particles[i == body.particles.length ? 0 : i].newPosition,
+				let p1 = body.particles[i == body.particles.length ? 0 : i].newPosition,
 					p2 = body.particles[i - 1].newPosition;
 
 				return p1.subtract(p2).norm().unit();
