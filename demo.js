@@ -4,7 +4,7 @@ window.Demo = function(canvas) {
 	var createActor = function () {
 		return new Actor(new Body([], 1),
 			{ stroke: '#CA72F2', fill: '#E0B3F5'},
-			{ stroke: '#8372F2', fill: '#AFA4F5'}
+			{ stroke: '#FFFFFF', fill: '#AFA4F5'}
 		);
 	}
 
@@ -24,6 +24,8 @@ window.Demo = function(canvas) {
 			alert("Click the screen to add particles, ya dummy! :)");
 			return false;
 		}
+
+		scene.actors[scene.actors.length-1].particlePallet = null;
 		
 		if(animated) return false;
 		

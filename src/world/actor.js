@@ -14,13 +14,15 @@ export default class Actor {
 		renderer.lineTo(this.body.particles[0].position);
 		renderer.draw();
 
-		renderer.updatePallet(this.particlePallet);
+		if(this.particlePallet) {
+			renderer.updatePallet(this.particlePallet);
 
-		this.body.particles.each(p => {
-			renderer.reset();
-			renderer.circle(p.position, 5);
-			renderer.draw();
-		});
+			this.body.particles.each(p => {
+				renderer.reset();
+				renderer.circle(p.position, 5);
+				renderer.draw();
+			});
+		}
 
 		renderer.reset();
 	}
