@@ -3,9 +3,14 @@ import Vector from '../math2d/vector';
 import Renderer from './renderer';
 import Bounds from './bounds';
 
+window.GRAVITY = new Vector(0, 8);
+
 export default class Scene {
+
 	static get TIMESTEP() { return 1/60; }
-	static get GRAVITY() { return new Vector(0, 8); }
+
+	static get GRAVITY() { return window.GRAVITY; }
+	static set GRAVITY(value) { window.GRAVITY = value; }
 
 	constructor(canvas, width, height) {
 		this.actors = [];
