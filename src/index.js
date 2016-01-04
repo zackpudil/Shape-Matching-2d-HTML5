@@ -14,6 +14,8 @@ import Bounds from './world/bounds';
 import Renderer from './world/renderer';
 import Scene from './world/scene';
 
+import Debugger from './debug/debugger';
+
 window.Vector = Vector;
 window.Matrix = Matrix;
 
@@ -27,3 +29,5 @@ window.Actor = Actor;
 window.Bounds = Bounds;
 window.Renderer = Renderer;
 window.Scene = Scene;
+
+window.Debugger = Debugger;

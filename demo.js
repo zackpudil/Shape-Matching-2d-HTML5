@@ -1,4 +1,3 @@
-
 window.Demo = function(canvas) {
 
 	var createActor = function () {
@@ -10,6 +9,8 @@ window.Demo = function(canvas) {
 
 	var scene = new Scene(canvas, canvas.width, canvas.height);
 	scene.actors.push(createActor());
+
+	window.d = new Debugger(scene);
 	
 	var interval = null;
 	
